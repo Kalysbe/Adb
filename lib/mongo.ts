@@ -4,7 +4,7 @@ const uri = process.env.MONGODB_URI || ""
 const options = {}
 
 let client
-let clientPromise: Promise<MongoClient>
+let clientPromise: Promise<MongoClient> | null = null
 
 // Флаг для отслеживания состояния подключения
 let isConnected = false
@@ -13,7 +13,12 @@ let isConnected = false
 const createConnection = async () => {
   if (!uri) {
     console.error("MongoDB URI не найден в переменных окружения")
-    // Вместо выброса исключения, возвращаем null
+    return null
+  }
+
+  // Проверка формата URI
+  if (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://")) {
+    console.error("Неверный формат MongoDB URI. URI должен начинаться с 'mongodb://' или 'mongodb+srv://'")
     return null
   }
 
@@ -28,7 +33,6 @@ const createConnection = async () => {
   } catch (err) {
     console.error("Ошибка подключения к MongoDB:", err)
     isConnected = false
-    // Вместо выброса исключения, возвращаем null
     return null
   }
 }
@@ -36,6 +40,20 @@ const createConnection = async () => {
 // Проверка состояния подключения
 export const getConnectionStatus = () => {
   return isConnected
+}
+
+// Безопасное получение клиента MongoDB
+export const getMongoClient = async () => {
+  if (!clientPromise) {
+    return null
+  }
+
+  try {
+    return await clientPromise
+  } catch (error) {
+    console.error("Ошибка при получении MongoDB клиента:", error)
+    return null
+  }
 }
 
 if (process.env.NODE_ENV === "development") {
