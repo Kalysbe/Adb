@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Главная страница -->
+  <url>
+    <loc>https://adb-solution.com/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en" />
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- О нас -->
+  <url>
+    <loc>https://adb-solution.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/about" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Услуги -->
+  <url>
+    <loc>https://adb-solution.com/services</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Аудит -->
+  <url>
+    <loc>https://adb-solution.com/services/audit</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/audit" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/audit" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Бухгалтерские услуги -->
+  <url>
+    <loc>https://adb-solution.com/services/accounting</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/accounting" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/accounting" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Налоговый консалтинг -->
+  <url>
+    <loc>https://adb-solution.com/services/tax-consulting</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/tax-consulting" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/tax-consulting" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Бизнес-консалтинг -->
+  <url>
+    <loc>https://adb-solution.com/services/business-consulting</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/business-consulting" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/business-consulting" />
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Новости -->
+  <url>
+    <loc>https://adb-solution.com/news</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/news" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/news" />
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Контакты -->
+  <url>
+    <loc>https://adb-solution.com/contacts</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/contacts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/contacts" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
