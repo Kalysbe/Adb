@@ -19,7 +19,7 @@ export function generateMetadata({
   description,
   keywords = [],
   canonical,
-  ogImage = "https://adb-solution.com/logo.png",
+  ogImage = "https://adb-solution.com/og-image.jpg",
   ogType = "website",
   twitterCard = "summary_large_image",
   noindex = false,

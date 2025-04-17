@@ -113,7 +113,7 @@ export function ServiceLayout({
         <section className="py-16 md:py-20 bg-[#cdb32f]/10">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              {language === "ru" ? "Готовы начать сотр��дничество?" : "Ready to Start Cooperation?"}
+              {language === "ru" ? "Готовы начать сотрудничество?" : "Ready to Start Cooperation?"}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
               {language === "ru"

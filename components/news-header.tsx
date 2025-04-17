@@ -3,10 +3,10 @@
 import { formatDate } from "@/lib/utils"
 import { useLanguage } from "@/lib/i18n/context"
 import { Eye, Calendar, User } from "lucide-react"
-import type { Post as PostType } from "@/lib/api"
+import type { Post } from "@/lib/api"
 
 interface NewsHeaderProps {
-  post: PostType
+  post: Post
 }
 
 export function NewsHeader({ post }: NewsHeaderProps) {
@@ -30,7 +30,6 @@ export function NewsHeader({ post }: NewsHeaderProps) {
       </div>
 
       {post.user && (
-        // Обновим отображение автора, чтобы избежать ошибки с null
         <div className="flex items-center">
           <User className="h-4 w-4 mr-1" />
           <span>{post.user.fullName}</span>

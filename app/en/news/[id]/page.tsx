@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: NewsPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: "Новость не найдена | ADB SOLUTION",
-      description: "Запрашиваемая новость не найдена.",
+      title: "News not found | ADB SOLUTION",
+      description: "The requested news article was not found.",
     }
   }
 
@@ -66,7 +66,7 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function NewsPostPage({ params }: NewsPostPageProps) {
+export default async function NewsPostPageEn({ params }: NewsPostPageProps) {
   const post = await getPost(params.id)
 
   if (!post) {
@@ -104,7 +104,7 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
 
                   <TelegramPromo />
 
-                  <SocialShare url={`/news/${post._id}`} title={post.title} />
+                  <SocialShare url={`/en/news/${post._id}`} title={post.title} />
 
                   <div className="prose prose-lg max-w-none mt-8">
                     <ReactMarkdown>{post.text}</ReactMarkdown>
@@ -112,7 +112,7 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
 
                   {post.tags && post.tags.length > 0 && (
                     <div className="mt-12 pt-6 border-t border-gray-200">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-3">Теги:</h2>
+                      <h2 className="text-lg font-semibold text-gray-900 mb-3">Tags:</h2>
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
                           <span
@@ -139,13 +139,13 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
 
             <div className="lg:col-span-4">
               <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 sticky top-24">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900">Популярные новости</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-900">Popular News</h2>
                 <div className="space-y-4">
                   {allPosts
                     .sort((a, b) => b.viewsCount - a.viewsCount)
                     .slice(0, 5)
                     .map((popularPost) => (
-                      <a key={popularPost._id} href={`/news/${popularPost._id}`} className="block group">
+                      <a key={popularPost._id} href={`/en/news/${popularPost._id}`} className="block group">
                         <div className="flex gap-3">
                           <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded overflow-hidden">
                             <img
@@ -158,7 +158,7 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
                             <h3 className="text-sm font-medium text-gray-900 group-hover:text-[#cdb32f] line-clamp-3">
                               {popularPost.title}
                             </h3>
-                            <div className="text-xs text-gray-500 mt-1">{popularPost.viewsCount} просмотров</div>
+                            <div className="text-xs text-gray-500 mt-1">{popularPost.viewsCount} views</div>
                           </div>
                         </div>
                       </a>
@@ -197,7 +197,7 @@ export default async function NewsPostPage({ params }: NewsPostPageProps) {
             keywords: (post.tags || []).join(", "),
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://adb-solution.com/news/${post._id}`,
+              "@id": `https://adb-solution.com/en/news/${post._id}`,
             },
             image: post.imageUrl || "https://adb-solution.com/og-image.jpg",
           }),
