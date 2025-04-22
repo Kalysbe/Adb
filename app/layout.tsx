@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/lib/i18n/context"
 import Script from "next/script"
 import { OrganizationSchema, WebsiteSchema, LocalBusinessSchema, SiteNavigationSchema } from "@/components/schema-org"
+import { PageTracker } from "@/components/page-tracker"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
@@ -140,12 +141,12 @@ export default function RootLayout({
         <LocalBusinessSchema />
         <SiteNavigationSchema />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <PageTracker />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
   )
 }
-
-
-import './globals.css'
