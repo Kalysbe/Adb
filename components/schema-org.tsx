@@ -6,7 +6,13 @@ export function OrganizationSchema() {
     "@type": "Organization",
     name: "ADB SOLUTION",
     url: "https://adb-solution.com",
-    logo: "https://adb-solution.com/favicon2.png",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://adb-solution.com/logo.png",
+      width: "512",
+      height: "512",
+    },
+    image: "https://adb-solution.com/logo.png",
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "+996555751592",
@@ -35,7 +41,13 @@ export function LocalBusinessSchema() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "ADB SOLUTION",
-    image: "https://adb-solution.com/favicon2.png",
+    image: "https://adb-solution.com/logo.png",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://adb-solution.com/logo.png",
+      width: "512",
+      height: "512",
+    },
     url: "https://adb-solution.com",
     telephone: "+996555751592",
     email: "gulzada@adb-solution.com",
@@ -109,4 +121,15 @@ export function SiteNavigationSchema() {
   }
 
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+}
+
+export function SchemaOrg() {
+  return (
+    <>
+      <OrganizationSchema />
+      <LocalBusinessSchema />
+      <WebsiteSchema />
+      <SiteNavigationSchema />
+    </>
+  )
 }

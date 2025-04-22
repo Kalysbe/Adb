@@ -4,14 +4,16 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/lib/i18n/context"
+import { AuthProvider } from "@/lib/auth-context"
 import Script from "next/script"
-import { OrganizationSchema, WebsiteSchema, LocalBusinessSchema, SiteNavigationSchema } from "@/components/schema-org"
-import { PageTracker } from "@/components/page-tracker"
+import { SchemaOrg } from "@/components/schema-org"
+import { AnalyticsProvider } from "@/components/analytics-provider"
+import { cn } from "@/lib/utils"
+import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://adb-solution.com"),
   title: {
     default: "ADB SOLUTION | Профессиональные решения",
     template: "%s | ADB SOLUTION",
@@ -20,19 +22,15 @@ export const metadata: Metadata = {
     "ADB SOLUTION предлагает инновационные решения для вашего бизнеса. Узнайте больше о наших услугах и продуктах.",
   keywords: ["ADB SOLUTION", "бизнес решения", "инновации", "профессиональные услуги"],
   authors: [{ name: "ADB SOLUTION" }],
+  metadataBase: new URL("https://adb-solution.com"),
   icons: {
     icon: [
-      { url: "/logo.png", sizes: "any" },
-      { url: "/logo.png", type: "image/png" },
+      { url: "/logo.png", sizes: "32x32" },
+      { url: "/icon-192.png", sizes: "192x192" },
+      { url: "/icon-512.png", sizes: "512x512" },
     ],
     shortcut: "/logo.png",
-    apple: "/logo.png",
-    other: [
-      {
-        rel: "apple-touch-icon",
-        url: "/logo.png",
-      },
-    ],
+    apple: "/apple-icon.png",
   },
   manifest: "/manifest.json",
   openGraph: {
@@ -45,19 +43,19 @@ export const metadata: Metadata = {
       "ADB SOLUTION предлагает инновационные решения для вашего бизнеса. Узнайте больше о наших услугах и продуктах.",
     images: [
       {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
+        url: "/logo.png",
+        width: 512,
+        height: 512,
         alt: "ADB SOLUTION",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "ADB SOLUTION | Профессиональные решения",
     description:
       "ADB SOLUTION предлагает инновационные решения для вашего бизнеса. Узнайте больше о наших услугах и продуктах.",
-    images: ["/og-image.jpg"],
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
@@ -83,20 +81,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <head>
         <link rel="alternate" hrefLang="ru" href="https://adb-solution.com" />
         <link rel="alternate" hrefLang="en" href="https://adb-solution.com/en" />
         <link rel="alternate" hrefLang="x-default" href="https://adb-solution.com" />
 
         {/* Дополнительные мета-теги для иконок */}
-        <link rel="icon" type="image/png" href="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="msapplication-TileImage" content="/logo.png" />
         <meta name="msapplication-TileColor" content="#cdb32f" />
         <meta name="theme-color" content="#cdb32f" />
       </head>
-      <body className={inter.className}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
         <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-VVN26ZBW3S" />
         <Script
           id="google-analytics"
@@ -136,14 +136,15 @@ export default function RootLayout({
           </div>
         </noscript>
 
-        <OrganizationSchema />
-        <WebsiteSchema />
-        <LocalBusinessSchema />
-        <SiteNavigationSchema />
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <SchemaOrg />
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <LanguageProvider>
-            <PageTracker />
-            {children}
+            <AuthProvider>
+              <Suspense>
+                {children}
+                <AnalyticsProvider />
+              </Suspense>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

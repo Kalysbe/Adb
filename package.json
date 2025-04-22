@@ -59,8 +59,8 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "next-sitemap": "latest",
-    "schema-dts": "latest",
-    "react-markdown": "latest"
+    "react-markdown": "latest",
+    "schema-dts": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

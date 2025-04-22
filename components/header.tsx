@@ -4,17 +4,27 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Phone, MessageCircle, Send } from "lucide-react"
+import { Menu, X, Phone, MessageCircle, Send, User, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/i18n/context"
+import { useAuth } from "@/lib/auth-context"
 import { LanguageSwitcher } from "./language-switcher"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
   const { t } = useLanguage()
+  const { user, logout } = useAuth()
 
   const navigation = [
     { name: t("home"), href: "/" },
@@ -41,6 +51,10 @@ export function Header() {
   useEffect(() => {
     setIsMenuOpen(false)
   }, [pathname])
+
+  const handleLogout = () => {
+    logout()
+  }
 
   return (
     <header
@@ -105,9 +119,41 @@ export function Header() {
 
             <LanguageSwitcher />
 
-            <Button className="hidden sm:flex bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full px-3 md:px-5 py-1 md:py-2 text-xs md:text-sm">
-              {t("login")}
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full px-3 md:px-5 py-1 md:py-2 text-xs md:text-sm">
+                    <User className="h-4 w-4 mr-2" />
+                    <span className="hidden sm:inline">{t("login")}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin">Панель управления</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/news">Управление новостями</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/settings">Настройки</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Выйти
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                asChild
+                className="hidden sm:flex bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full px-3 md:px-5 py-1 md:py-2 text-xs md:text-sm"
+              >
+                <Link href="/login">Войти</Link>
+              </Button>
+            )}
 
             <div className="flex md:hidden">
               <button type="button" className="text-gray-700" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -163,9 +209,27 @@ export function Header() {
               </a>
             </div>
             <div className="py-2 px-3">
-              <Button className="w-full bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full">
-                {t("login")}
-              </Button>
+              {user ? (
+                <div className="space-y-2">
+                  <div className="text-sm text-gray-500">Вы вошли как: {user.fullName}</div>
+                  <Link
+                    href="/admin"
+                    className="block w-full bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full py-2 px-4 text-center"
+                  >
+                    Панель управления
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full bg-red-500 hover:bg-red-600 text-white rounded-full py-2 px-4 text-center"
+                  >
+                    Выйти
+                  </button>
+                </div>
+              ) : (
+                <Button asChild className="w-full bg-[#cdb32f] hover:bg-[#cdb32f]/90 text-white rounded-full">
+                  <Link href="/login">Войти</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>
