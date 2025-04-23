@@ -14,8 +14,30 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Получаем IP-адрес
-    const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown"
+    // Получаем IP-адрес из всех возможных заголовков
+    const realIp = request.headers.get("x-real-ip")
+    const forwardedFor = request.headers.get("x-forwarded-for")
+    const cfConnectingIp = request.headers.get("cf-connecting-ip")
+    const trueClientIp = request.headers.get("true-client-ip")
+
+    // Выбираем первый доступный IP-адрес
+    const ip =
+      realIp ||
+      (forwardedFor ? forwardedFor.split(",")[0] : null) ||
+      cfConnectingIp ||
+      trueClientIp ||
+      request.ip ||
+      "unknown"
+
+    // Логируем все возможные источники IP
+    console.log("[MIDDLEWARE] IP sources:", {
+      "x-real-ip": realIp,
+      "x-forwarded-for": forwardedFor,
+      "cf-connecting-ip": cfConnectingIp,
+      "true-client-ip": trueClientIp,
+      "request.ip": request.ip,
+      selected: ip,
+    })
 
     // Получаем User-Agent
     const userAgent = request.headers.get("user-agent") || "unknown"
@@ -29,25 +51,41 @@ export async function middleware(request: NextRequest) {
     // Получаем реферер
     const referer = request.headers.get("referer") || ""
 
+    // Создаем объект с данными для отправки
+    const trackingData = {
+      ip,
+      userAgent,
+      url,
+      referer,
+      deviceType,
+      timestamp: new Date().toISOString(),
+      // timeSpent будет 0, так как это начальный запрос
+      timeSpent: 0,
+    }
+
+    // Выводим данные в консоль
+    console.log("[MIDDLEWARE TRACKER] Отправляемые данные:", JSON.stringify(trackingData, null, 2))
+
     // Отправляем данные на API
     await fetch("https://api.adb-solution.com/tracker", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ip,
-        userAgent,
-        url,
-        referer,
-        deviceType,
-        timestamp: new Date().toISOString(),
-        // timeSpent будет 0, так как это начальный запрос
-        timeSpent: 0,
-      }),
+      body: JSON.stringify(trackingData),
     })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("[MIDDLEWARE TRACKER] Ошибка при отправке данных:", response.status, response.statusText)
+        } else {
+          console.log("[MIDDLEWARE TRACKER] Данные успешно отправлены")
+        }
+      })
+      .catch((error) => {
+        console.error("[MIDDLEWARE TRACKER] Ошибка при отправке данных:", error)
+      })
   } catch (error) {
-    console.error("Ошибка при отправке данных трекера:", error)
+    console.error("[MIDDLEWARE TRACKER] Ошибка при отправке данных трекера:", error)
   }
 
   return NextResponse.next()
