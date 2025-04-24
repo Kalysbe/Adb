@@ -24,13 +24,9 @@ export const metadata: Metadata = {
   authors: [{ name: "ADB SOLUTION" }],
   metadataBase: new URL("https://adb-solution.com"),
   icons: {
-    icon: [
-      { url: "/logo.png", sizes: "32x32" },
-      { url: "/icon-192.png", sizes: "192x192" },
-      { url: "/icon-512.png", sizes: "512x512" },
-    ],
+    icon: "/logo.png",
     shortcut: "/logo.png",
-    apple: "/apple-icon.png",
+    apple: "/logo.png",
   },
   manifest: "/manifest.json",
   openGraph: {
@@ -88,10 +84,8 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="x-default" href="https://adb-solution.com" />
 
         {/* Дополнительные мета-теги для иконок */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <meta name="msapplication-TileImage" content="/logo.png" />
         <meta name="msapplication-TileColor" content="#cdb32f" />
         <meta name="theme-color" content="#cdb32f" />
