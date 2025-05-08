@@ -9,6 +9,10 @@ Disallow: /private/
 
 # Разрешение доступа к важным разделам
 Allow: /services/
+Allow: /services/audit/
+Allow: /services/accounting/
+Allow: /services/tax-consulting/
+Allow: /services/business-consulting/
 Allow: /news/
 Allow: /about/
 Allow: /contacts/
@@ -23,3 +27,7 @@ Crawl-delay: 1
 # Расположение карт сайта
 Sitemap: https://adb-solution.com/sitemap.xml
 Sitemap: https://adb-solution.com/server-sitemap.xml
+
+# Важные страницы для индексации
+Allow: /services/audit
+Allow: /services/accounting

@@ -34,7 +34,8 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/audit" />
     <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/audit" />
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+    <lastmod>2023-12-15</lastmod>
   </url>
   
   <!-- Бухгалтерские услуги -->
@@ -43,7 +44,8 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/accounting" />
     <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/accounting" />
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+    <lastmod>2023-12-15</lastmod>
   </url>
   
   <!-- Налоговый консалтинг -->
@@ -52,7 +54,7 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/tax-consulting" />
     <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/tax-consulting" />
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   
   <!-- Бизнес-консалтинг -->
@@ -61,7 +63,7 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://adb-solution.com/services/business-consulting" />
     <xhtml:link rel="alternate" hreflang="en" href="https://adb-solution.com/en/services/business-consulting" />
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   
   <!-- Новости -->

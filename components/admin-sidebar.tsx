@@ -19,6 +19,11 @@ const menuItems = [
     icon: FileText,
   },
   {
+    title: "Контакты",
+    href: "/admin/contacts",
+    icon: Users,
+  },
+  {
     title: "Статистика",
     href: "/admin/analytics",
     icon: BarChart3,

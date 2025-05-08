@@ -6,11 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { FileText, Users, BarChart, Calendar } from "lucide-react"
 import Link from "next/link"
 import { getTrackerStats, type TrackerStats } from "@/lib/analytics-service"
+import { getPosts } from "@/lib/api"
 
 export default function AdminDashboard() {
   const { user } = useAuth()
   const [stats, setStats] = useState<TrackerStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [news, setNews] = useState<any[]>([])
+  const [newsLoading, setNewsLoading] = useState(true)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -25,15 +28,28 @@ export default function AdminDashboard() {
       }
     }
 
+    const fetchNews = async () => {
+      try {
+        setNewsLoading(true)
+        const posts = await getPosts()
+        setNews(posts.slice(0, 3)) // Берем только 3 последние новости
+      } catch (error) {
+        console.error("Error fetching news:", error)
+      } finally {
+        setNewsLoading(false)
+      }
+    }
+
     fetchStats()
+    fetchNews()
   }, [])
 
   const statsItems = [
     {
       title: "Всего новостей",
-      value: "24",
+      value: newsLoading ? "..." : news.length.toString(),
       icon: <FileText className="h-8 w-8 text-[#cdb32f]" />,
-      change: "+4 за месяц",
+      change: "Опубликовано на сайте",
       link: "/admin/news",
     },
     {
@@ -67,6 +83,22 @@ export default function AdminDashboard() {
       link: "/admin/analytics",
     },
   ]
+
+  // Функция для форматирования даты
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - date.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 1) {
+      return "Опубликовано вчера"
+    } else if (diffDays < 7) {
+      return `Опубликовано ${diffDays} дн. назад`
+    } else {
+      return `Опубликовано ${date.toLocaleDateString("ru-RU")}`
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -108,15 +140,38 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="flex items-start border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                  <div className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 mr-4"></div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Заголовок новости {item}</h3>
-                    <p className="text-sm text-gray-500">Опубликовано 2 дня назад</p>
+              {newsLoading ? (
+                // Скелетон для загрузки
+                [...Array(3)].map((_, i) => (
+                  <div key={i} className="flex items-start border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                    <div className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 mr-4"></div>
+                    <div className="w-full">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : news.length === 0 ? (
+                <div className="text-center py-4 text-gray-500">Нет опубликованных новостей</div>
+              ) : (
+                news.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex items-start border-b border-gray-100 pb-4 last:border-0 last:pb-0"
+                  >
+                    <div
+                      className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 mr-4 bg-cover bg-center"
+                      style={{
+                        backgroundImage: item.image ? `url(${item.image})` : "none",
+                      }}
+                    ></div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{item.title}</h3>
+                      <p className="text-sm text-gray-500">{formatDate(item.createdAt)}</p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
             <Link
               href="/admin/news"

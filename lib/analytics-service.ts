@@ -170,3 +170,41 @@ export async function getUniqueIPs(): Promise<string[]> {
     return []
   }
 }
+
+// Добавим новую функцию для получения статистики по IP-адресам после функции getUniqueIPs()
+
+// Получение статистики по IP-адресам
+export async function getIPStats(): Promise<{ ip: string; visits: number; lastVisit: string }[]> {
+  try {
+    const { trackers } = await getTrackers({ limit: 1000 })
+
+    // Группируем посещения по IP-адресам
+    const ipMap = new Map<string, { visits: number; lastVisit: string }>()
+
+    trackers.forEach((tracker) => {
+      const current = ipMap.get(tracker.ip) || { visits: 0, lastVisit: tracker.createdAt }
+
+      // Обновляем количество посещений
+      current.visits += 1
+
+      // Обновляем дату последнего посещения, если текущее посещение новее
+      if (new Date(tracker.createdAt) > new Date(current.lastVisit)) {
+        current.lastVisit = tracker.createdAt
+      }
+
+      ipMap.set(tracker.ip, current)
+    })
+
+    // Преобразуем Map в массив и сортируем по количеству посещений (по убыванию)
+    const ipStats = Array.from(ipMap.entries()).map(([ip, stats]) => ({
+      ip,
+      visits: stats.visits,
+      lastVisit: stats.lastVisit,
+    }))
+
+    return ipStats.sort((a, b) => b.visits - a.visits)
+  } catch (error) {
+    console.error("Error calculating IP stats:", error)
+    return []
+  }
+}

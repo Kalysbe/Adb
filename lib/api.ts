@@ -13,6 +13,16 @@ export interface Post {
   updatedAt: string
 }
 
+// Add this interface after the Post interface
+export interface Contact {
+  _id: string
+  name: string
+  email: string
+  phone?: string
+  message: string
+  createdAt: string
+}
+
 // Базовый URL API
 const API_BASE_URL = "https://api.adb-solution.com"
 
@@ -184,5 +194,145 @@ export async function searchPosts(query: string): Promise<Post[]> {
         post.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase())),
     )
     return handleApiError(error, filteredPosts)
+  }
+}
+
+// Add these functions at the end of the file
+
+// Получение всех контактов
+export async function getContacts(): Promise<Contact[]> {
+  // Фиктивные данные для использования в случае ошибки
+  const mockContacts: Contact[] = [
+    {
+      _id: "contact-1",
+      name: "Иван Петров",
+      email: "ivan@example.com",
+      phone: "+7 (999) 123-45-67",
+      message: "Интересуют услуги бухгалтерского учета для ООО",
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      _id: "contact-2",
+      name: "Елена Смирнова",
+      email: "elena@example.com",
+      phone: "+7 (999) 987-65-43",
+      message: "Нужна консультация по налоговой оптимизации",
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      _id: "contact-3",
+      name: "Алексей Иванов",
+      email: "alexey@example.com",
+      phone: "+7 (999) 456-78-90",
+      message: "Требуется аудит финансовой отчетности",
+      createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ]
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/contacts`, {
+      next: { revalidate: 60 }, // Кеширование на 1 минуту
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch contacts: ${response.status} ${response.statusText}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    return handleApiError(error, mockContacts)
+  }
+}
+
+// Получение одного контакта по ID
+export async function getContact(id: string): Promise<Contact | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact/${id}`, {
+      next: { revalidate: 60 },
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch contact: ${response.status} ${response.statusText}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    // В случае ошибки ищем контакт в фиктивных данных
+    const mockContacts = await getContacts()
+    const mockContact = mockContacts.find((contact) => contact._id === id)
+    return handleApiError(error, mockContact || null)
+  }
+}
+
+// Создание нового контакта
+export async function createContact(contactData: Omit<Contact, "_id" | "createdAt">): Promise<Contact | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(contactData),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to create contact: ${response.status} ${response.statusText}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Error creating contact:", error)
+    return null
+  }
+}
+
+// Обновление контакта
+export async function updateContact(id: string, contactData: Partial<Contact>): Promise<Contact | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(contactData),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to update contact: ${response.status} ${response.statusText}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Error updating contact:", error)
+    return null
+  }
+}
+
+// Удаление контакта
+export async function deleteContact(id: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete contact: ${response.status} ${response.statusText}`)
+    }
+
+    return true
+  } catch (error) {
+    console.error("Error deleting contact:", error)
+    return false
   }
 }

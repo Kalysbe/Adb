@@ -13,6 +13,8 @@ import { ChevronLeft, ChevronRight, Search, Laptop, Smartphone, Tablet, Monitor 
 import { AnalyticsOverview } from "@/components/analytics-overview"
 import { TopPagesChart } from "@/components/top-pages-chart"
 import { DeviceDistribution } from "@/components/device-distribution"
+// Добавим импорт компонента ActiveIPAddresses
+import { ActiveIPAddresses } from "@/components/active-ip-addresses"
 
 export default function AnalyticsPage() {
   const [trackers, setTrackers] = useState<Tracker[]>([])
@@ -115,6 +117,9 @@ export default function AnalyticsPage() {
         <TopPagesChart />
         <DeviceDistribution />
       </div>
+
+      {/* Активные IP-адреса */}
+      <ActiveIPAddresses />
 
       {/* Фильтры */}
       <Card>
